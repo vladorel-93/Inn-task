@@ -6,6 +6,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 public class RequestMaker {
 
@@ -18,13 +21,17 @@ public class RequestMaker {
 
         try {
             client.executeMethod(method);
-            System.out.println("Результат:" + method.getResponseBodyAsString());
+            System.out.println("Признак состояния:" + method.getResponseBodyAsString());
         } catch (IOException z) {
             System.out.println("fail to make request");
         }
+        finally {
+            method.releaseConnection();
+        }
     }
 
-    public String readInn(){
+
+    public String readInnAndPrepandCurrentDate(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String inn = "";
         while (!(inn.length() == 10 || inn.length() == 12)) {
@@ -35,6 +42,8 @@ public class RequestMaker {
                 System.out.println("Ошибка ввода данных");
             }
         }
-        return url + "?inn=" + inn;
+        LocalDate currentDate = LocalDate.now();
+        String formattedDate =  currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        return url + "?inn=" + inn + "&dt=" + formattedDate;
     }
 }
