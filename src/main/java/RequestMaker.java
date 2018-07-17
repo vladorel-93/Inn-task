@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class RequestMaker {
 
+    //URL запроса
     private static String url = "http://npchk.nalog.ru/ajax.html";
 
     public void makeRequest(String inn) {
@@ -34,6 +35,7 @@ public class RequestMaker {
     public String readInnAndPrepandCurrentDate(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String inn = "";
+        //10-значный ИНН для ЮЛ, 12-значный ИНН для ФЗ
         while (!(inn.length() == 10 || inn.length() == 12)) {
             try {
                 System.out.print("Введите 10- или 12-значный инн:");
@@ -42,6 +44,7 @@ public class RequestMaker {
                 System.out.println("Ошибка ввода данных");
             }
         }
+        //Добавляем в качестве параметра запроса текущую дату в формате, соответствующем формату, принятому в данном API
         LocalDate currentDate = LocalDate.now();
         String formattedDate =  currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         return url + "?inn=" + inn + "&dt=" + formattedDate;
