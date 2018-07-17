@@ -18,21 +18,22 @@ public class RequestMaker {
 
         try {
             client.executeMethod(method);
-            System.out.println(method.getResponseBodyAsString());
+            System.out.println("Результат:" + method.getResponseBodyAsString());
         } catch (IOException z) {
-            System.out.println("fail");
+            System.out.println("fail to make request");
         }
     }
 
     public String readInn(){
-        System.out.print("Введите инн:");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String inn = "";
-        try{
-            inn = reader.readLine();
-        }
-        catch (IOException x){
-            System.out.println("Ошибка ввода данных");
+        while (!(inn.length() == 10 || inn.length() == 12)) {
+            try {
+                System.out.print("Введите 10- или 12-значный инн:");
+                inn = reader.readLine();
+            } catch (IOException x) {
+                System.out.println("Ошибка ввода данных");
+            }
         }
         return url + "?inn=" + inn;
     }
